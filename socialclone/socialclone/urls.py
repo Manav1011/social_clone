@@ -19,5 +19,10 @@ from django.views.generic import TemplateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    re_path(r'^$',TemplateView.as_view(template_name='index.html'),name='index')    
+    re_path(r'^$',TemplateView.as_view(template_name='index.html'),name='index'),
+    re_path(r'^accounts/',include('accounts.urls'),name='accounts'),
+    #----------------------------------------------------------------
+    re_path(r'^accounts/',include('django.contrib.auth.urls')),
+    re_path(r'^test/',TemplateView.as_view(template_name='test.html'),name='test'),
+    re_path(r'^thanks/',TemplateView.as_view(template_name='thanks.html'),name='thanks'),
 ]
