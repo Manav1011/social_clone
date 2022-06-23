@@ -7,6 +7,8 @@
             <a href="{% url 'posts:for_user' username=user.username%}">
                 @{{user.username}}
             </a>
+        {% else %}
+        <h2>User is not authenticated</h2>
         {% endif %}
         <h2>Groups</h2>
         <p>Welcome to the groups page!</p>
@@ -17,24 +19,24 @@
 </div>
 {% endblock pregroup %}
 
-{% block content %}
+{% block group_content %}
 <div class="col-md-8">
     <div class="list-group">
         {% for group in object_list %}
-        <a href="{% url 'groups:single' slug=group.slug %}">
-            <h3 class="title list-group-item-heading">{{group.name}}</h3>
-            <div class="list-group-item-text container-fluid">
+        <a href="{% url 'groups:single' slug=group.slug %}" class="list-group-item">
+            <h3 class="title list-group-item">{{group.name}}</h3>
+            <div class="list-group-item-text container-fluid card-body">
+                <span>
                 {{group.description | safe}}
+            </span>
                 <div class="row">
-                    <div class="col-md-4">
-                        <span class="badge">
-                            {{group.member.count}}
+                    <div class="col-md-4 ">
+                        <span>
+                            members: {{group.member.all |length}}
+                            <br>
+                            post: {{group.group_posts.all | length}}
                         </span>
-                        member{{group.member.count | pluralize}}
-                    </div>
-                    <div class="col-md-4">
-                        <span class="badge">{{group.posts.count}}</span>
-                        post{{group.posts.count | pluralize}}
+                        
                     </div>
                 </div>
             </div>
@@ -42,4 +44,4 @@
         {% endfor %}
     </div>
 </div>
-{% endblock content %}
+{% endblock group_content %}

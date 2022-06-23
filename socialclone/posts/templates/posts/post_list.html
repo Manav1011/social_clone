@@ -8,7 +8,7 @@
                 Your Groups
             </h5>
             <ul class="list-unstyled">
-                {% for member_group in get_user_groups%}
+                {% for member_group in user.ugroups.all%}
                     <li class=group li-with-bullet>
                         <a href="{% url 'groups:single' slug=member_group.slug%}">
                         {{member_group.name}}
@@ -25,7 +25,7 @@
                 All Groups
             </h5>
             <ul class="list-unstyled">
-                {% for other_group in get_groups%}
+                {% for other_group in groups%}
                 <li class="group li-with-bullet">
                     <a href={% url 'groups:single' slug=other_group.slug%}>
                         {{other_group.name}}

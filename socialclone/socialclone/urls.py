@@ -21,6 +21,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     re_path(r'^$',TemplateView.as_view(template_name='index.html'),name='index'),
     re_path(r'^accounts/',include('accounts.urls'),name='accounts'),
+    re_path(r'^posts/',include('posts.urls'),name='posts'),
+    re_path(r'^groups/',include('groups.urls'),name='groups'),
     #----------------------------------------------------------------
     re_path(r'^accounts/',include('django.contrib.auth.urls')),
     re_path(r'^test/',TemplateView.as_view(template_name='test.html'),name='test'),

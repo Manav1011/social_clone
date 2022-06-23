@@ -8,6 +8,7 @@ from django.views import generic
 from braces.views import SelectRelatedMixin
 
 from . import models
+from groups.models import Group
 from . import forms
 from django.contrib import messages
 
@@ -20,19 +21,24 @@ class PostList(SelectRelatedMixin,generic.ListView):
     model = models.Post
     select_related=('user','group')
     
+    def get_context_data(self, **kwargs):
+        context=super().get_context_data(**kwargs)
+        context['groups']=Group.objects.all()
+        return context
+    
 class UserPosts(generic.ListView):
     model=models.Post
     template_name='posts/user_post_list.html'
     
     def get_queryset(self):
         try:
-            self.post.user = User.objects.prefetch_related('posts').get(username__iexact=self.kwargs.get('username'))
+            self.post_user = User.objects.get(username__iexact=self.kwargs.get('username'))
         
         except User.DoesNotExist:
             raise Http404
         
         else:
-            return self.post_user.posts.all()
+            return self.post_user.user_posts.all()
     
     def get_context_data(self,**kwargs):
         context=super().get_context_data(**kwargs)
@@ -50,7 +56,7 @@ class PostDetail(SelectRelatedMixin, generic.DetailView):
     
 class CreatePost(LoginRequiredMixin,SelectRelatedMixin,generic.CreateView):
     model=models.Post
-    fields=('messgae','group')
+    fields=('message','group')
     
     def form_valid(self, form):
         self.object=form.save(commit=False)

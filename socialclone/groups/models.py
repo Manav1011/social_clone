@@ -15,14 +15,14 @@ class Group(models.Model):
     name=models.CharField(max_length=255, unique=True)
     slug=models.SlugField(allow_unicode=True,unique=True)
     description=models.TextField(blank=True,default='')
-    member=models.ManyToManyField(User,through='GroupMember')
+    member=models.ManyToManyField(User,through='GroupMember',related_name='ugroups')
     
     def __str__(self):
         return self.name
     
     def save(self,*args, **kwargs):
-        super().save(*args, **kwargs)
         self.slug=slugify(self.name)
+        super().save(*args, **kwargs)
     
     def get_absolute_url(self):
         return reverse("groups:single", kwargs={"slug": self.slug})
@@ -32,11 +32,11 @@ class Group(models.Model):
     
         
 class GroupMember(models.Model):
-    group=models.ForeignKey(Group,on_delete=models.CASCADE,related_name='groups')
-    user=models.ForeignKey(User, on_delete=models.CASCADE,related_name='user_groups')
+    group=models.ForeignKey(Group,on_delete=models.PROTECT,related_name='groups')
+    user=models.ForeignKey(User, on_delete=models.PROTECT,related_name='user_groups')
     
     def __str__(self):
-        return self.user.username
+        return f'User: {self.user.username} Group: {self.group.name}'
      
     class Meta:
         unique_together =['group','user']

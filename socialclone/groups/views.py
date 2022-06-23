@@ -41,11 +41,12 @@ class LeaveGroup(LoginRequiredMixin,generic.RedirectView):
     def get(self,request,*args, **kwargs):
         try:
             membership=GroupMember.objects.filter(
-                user=request.user,
+                user=self.request.user,
                 group__slug=self.kwargs.get('slug')
             ).get()
         except GroupMember.DoesNotExist:
             messages.warning(request,'Sorry you are not in this group!')
         else:
+            membership.delete()
             messages.success(request,'You have left this gouop')
         return super().get(request,*args,**kwargs)
