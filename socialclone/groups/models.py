@@ -6,6 +6,9 @@ from django.utils.text import slugify
 from django.contrib.auth import get_user_model
 
 # Create your models here.
+from django import template
+register=template.Library()
+
 User=get_user_model()
 
 class Group(models.Model):
