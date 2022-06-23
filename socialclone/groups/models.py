@@ -39,4 +39,4 @@ class GroupMember(models.Model):
         return self.user.username
      
     class Meta:
-        unique_together =('group''user')
+        unique_together =['group','user']
